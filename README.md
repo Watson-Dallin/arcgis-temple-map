@@ -9,6 +9,14 @@ I wanted to learn mapping software as well as celebrate the announcement of so m
 
 [Software Demo Video](https://youtu.be/eADRp3JyMGQ)
 
+Note: I've included these images because the demonstration video failed and only captured audio
+
+Full Map
+![Full Map Image](https://github.com/Watson-Dallin/arcgis-temple-map/blob/main/Full%20Map.png?raw=true)
+
+Pop-up Example
+![Pop-up](https://github.com/Watson-Dallin/arcgis-temple-map/blob/main/popup%20example.png?raw=true)
+
 # Development Environment
 
 I wrote implemented this program using an ArcGIS API, JavaScript, and HTML. I used Visual Studio Code as my editor.
