@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Temples Announced By President Nelson</title>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 90%;
+            width: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.21/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.21/"></script>
+    <script>
+        require([
+            "esri/config",
+            "esri/Map",
+            "esri/views/MapView",
+
+            "esri/Graphic",
+            "esri/layers/GraphicsLayer"
+
+        ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer) {
+
+            esriConfig.apiKey =
+                "AAPK427b8f37332a404cbb0edc1136e6271bPlbov0LgVq7tihILOK-UOHpIedLyPKnKDwgeDguP7IfN-fQ2LWckmekVHKL4ITnM";
+
+            const map = new Map({
+                basemap: "arcgis-topographic" //Basemap layer service
+            });
+
+            const view = new MapView({
+                map: map,
+                center: [0, 0], //Longitude, latitude
+                zoom: 3,
+                container: "viewDiv"
+            });
+
+            const graphicsLayer = new GraphicsLayer();
+            map.add(graphicsLayer);
+
+            const simpleMarkerSymbol = {
+                type: "simple-marker",
+                color: [50, 60, 100], // Boom of Mormon Blue
+                outline: {
+                    color: [201, 168, 8], // Sacred Plates Gold
+                    width: 2
+                }
+            };
+            const popupTemplate = {
+                title: "{Name}",
+                content: "{Description}"
+            }
+
+
+            // array of dictionaries. Temple site data.
+            let temples = [
+                //{id: , name: , announceDate: , x: , y: },
+
+                // April 2018 Conference
+                {
+                    id: 1,
+                    name: "Salta, Argentina",
+                    announceDate: "April 2018",
+                    x: -65.4232,
+                    y: -24.7821
+                },
+                {
+                    id: 2,
+                    name: "Bengaluru India",
+                    announceDate: "April 2018",
+                    x: 77.5946,
+                    y: 12.9716
+                },
+                {
+                    id: 3,
+                    name: "Managua, Nicaragua",
+                    announceDate: "April 2018",
+                    x: -86.2362,
+                    y: 12.1150
+                },
+                {
+                    id: 4,
+                    name: "Cagayan de Oro, Philippines",
+                    announceDate: "April 2018",
+                    x: 124.6319,
+                    y: 8.4542
+                },
+                {
+                    id: 5,
+                    name: "Layton, Utah",
+                    announceDate: "April 2018",
+                    x: -111.9711,
+                    y: 41.0602
+                },
+                {
+                    id: 6,
+                    name: "Richmond, Virginia",
+                    announceDate: "April 2018",
+                    x: -77.4360,
+                    y: 37.5407
+                },
+                {
+                    id: 7,
+                    name: "A major city yet to be determined in Russia",
+                    announceDate: "April 2018",
+                    x: 37.6173,
+                    y: 55.7558
+                },
+
+                //October 2018 Conference
+                {
+                    id: 8,
+                    name: "Mendoza, Argentina",
+                    announceDate: "October 2018",
+                    x: -68.8458,
+                    y: -32.8895
+                },
+                {
+                    id: 9,
+                    name: "Salvador, Brazil",
+                    announceDate: "October 2018",
+                    x: -38.5016,
+                    y: -12.9777
+                },
+                {
+                    id: 10,
+                    name: "Yuba City, California",
+                    announceDate: "October 2018",
+                    x: -121.6169,
+                    y: 39.1404
+                },
+                {
+                    id: 11,
+                    name: "Phnom Penh, Cambodia",
+                    announceDate: "October 2018",
+                    x: 104.9282,
+                    y: 11.5564
+                },
+                {
+                    id: 12,
+                    name: "Praia, Cape Verde",
+                    announceDate: "October 2018",
+                    x: -23.5133,
+                    y: 14.9330
+                },
+                {
+                    id: 13,
+                    name: "Yigo, Guam",
+                    announceDate: "October 2018",
+                    x: 144.8847,
+                    y: 13.5340
+                },
+                {
+                    id: 14,
+                    name: "Puebla, Mexico",
+                    announceDate: "October 2018",
+                    x: -98.2063,
+                    y: 19.0414
+                },
+                {
+                    id: 15,
+                    name: "Auckland, New Zealand",
+                    announceDate: "October 2018",
+                    x: 174.7645,
+                    y: -36.8509
+                },
+                {
+                    id: 16,
+                    name: "Lagos, Nigeria",
+                    announceDate: "October 2018",
+                    x: 6.5244,
+                    y: 3.3792
+                },
+                {
+                    id: 17,
+                    name: "Davao, Philippines",
+                    announceDate: "October 2018",
+                    x: 125.4553,
+                    y: 7.1907
+                },
+                {
+                    id: 18,
+                    name: "San Juan, Puerto Rico",
+                    announceDate: "October 2018",
+                    x: -66.1057,
+                    y: 18.4655
+                },
+                {
+                    id: 19,
+                    name: "Washington County, Utah",
+                    announceDate: "October 2018",
+                    x: -113.4776,
+                    y: 37.3225
+                },
+
+                // April 2019 Conference
+                {
+                    id: 20,
+                    name: "Pago Pago, American Samoa",
+                    announceDate: "April 2019",
+                    x: -170.7020,
+                    y: -14.2756
+                },
+                {
+                    id: 21,
+                    name: "Okinawa City, Okinawa",
+                    announceDate: "April 2019",
+                    x: 127.8056,
+                    y: 26.3344
+                },
+                {
+                    id: 22,
+                    name: "Neiafu, Tonga",
+                    announceDate: "April 2019",
+                    x: -173.9837,
+                    y: -18.6477
+                },
+                {
+                    id: 23,
+                    name: "Tooele Valley, Utah",
+                    announceDate: "April 2019",
+                    x: -112.2983,
+                    y: 40.5308
+                },
+                {
+                    id: 24,
+                    name: "Moses Lake, Washington",
+                    announceDate: "April 2019",
+                    x: -119.2781,
+                    y: 47.1301
+                },
+                {
+                    id: 25,
+                    name: "San Pedro Sula, Honduras",
+                    announceDate: "April 2019",
+                    x: -88.0139,
+                    y: 15.5039
+                },
+                {
+                    id: 26,
+                    name: "Antofagasta, Chile",
+                    announceDate: "April 2019",
+                    x: -70.3975,
+                    y: -23.6509
+                },
+                {
+                    id: 27,
+                    name: "Budapest, Hungary",
+                    announceDate: "April 2019",
+                    x: 19.0402,
+                    y: 47.4979
+                },
+
+                //October 2019 Conference
+                {
+                    id: 28,
+                    name: "Freetown, Sierra Leone",
+                    announceDate: "October 2019",
+                    x: -13.2317,
+                    y: 8.4657
+                },
+                {
+                    id: 29,
+                    name: "Orem, Utah",
+                    announceDate: "October 2019",
+                    x: -111.6946,
+                    y: 40.2969
+                },
+                {
+                    id: 30,
+                    name: "Port Moresby, Papua New Guinea",
+                    announceDate: "October 2019",
+                    x: 147.1803,
+                    y: -9.4438
+                },
+                {
+                    id: 31,
+                    name: "Bentonville, Arkansas",
+                    announceDate: "OctoberCicFGTPKKTBR 2019",
+                    x: -94.2088,
+                    y: 36.3729
+                },
+                {
+                    id: 32,
+                    name: "Bacolod, Philippines",
+                    announceDate: "October 2019",
+                    x: 122.9563,
+                    y: 10.6840
+                },
+                {
+                    id: 33,
+                    name: "McAllen, Texas",
+                    announceDate: "October 2019",
+                    x: -98.2300,
+                    y: 26.2034
+                },
+                {
+                    id: 34,
+                    name: "Cobán, Guatemala",
+                    announceDate: "October 2019",
+                    x: -90.3843,
+                    y: 15.4651
+                },
+                {
+                    id: 35,
+                    name: "Taylorsville, Utah",
+                    announceDate: "October 2019",
+                    x: -111.9388,
+                    y: 40.6677
+                },
+
+                //April 2020 general conference 
+                {
+                    id: 36,
+                    name: "Bahía Blanca, Argentina",
+                    announceDate: "April 2020",
+                    x: -62.2663,
+                    y: -38.7183
+                },
+                {
+                    id: 37,
+                    name: "Tallahassee, Florida",
+                    announceDate: "April 2020",
+                    x: -84.2807,
+                    y: 30.4383
+                },
+                {
+                    id: 38,
+                    name: "Lubumbashi, Democratic Republic of the Congo",
+                    announceDate: "April 2020",
+                    x: 27.5026,
+                    y: -11.6876
+                },
+                {
+                    id: 39,
+                    name: "Pittsburgh, Pennsylvania",
+                    announceDate: "April 2020",
+                    x: -79.9959,
+                    y: 40.4406
+                },
+                {
+                    id: 40,
+                    name: "Benin City, Nigeria",
+                    announceDate: "April 2020",
+                    x: 5.6037,
+                    y: 6.3350
+                },
+                {
+                    id: 41,
+                    name: "Syracuse, Utah",
+                    announceDate: "April 2020",
+                    x: -112.0647,
+                    y: 41.0894
+                },
+                {
+                    id: 42,
+                    name: "Dubai, United Arab Emirates",
+                    announceDate: "April 2020",
+                    x: 55.2708,
+                    y: 25.2048
+                },
+                {
+                    id: 43,
+                    name: "Shanghai, People’s Republic of China",
+                    announceDate: "April 2020",
+                    x: 121.4737,
+                    y: 31.2304
+                },
+
+                //October 2020 general conference
+                {
+                    id: 44,
+                    name: "Tarawa, Kiribati",
+                    announceDate: "October 2020",
+                    x: 172.9717,
+                    y: 1.4518
+                },
+                {
+                    id: 45,
+                    name: "Port Vila, Vanuatu",
+                    announceDate: "October 2020",
+                    x: 168.3273,
+                    y: -17.7333
+                },
+                {
+                    id: 46,
+                    name: "Lindon, Utah",
+                    announceDate: "October 2020",
+                    x: -111.7208,
+                    y: 40.3433
+                },
+                {
+                    id: 47,
+                    name: "Greater Guatemala City, Guatemala",
+                    announceDate: "October 2020",
+                    x: -90.5069,
+                    y: 14.6349
+                },
+                {
+                    id: 48,
+                    name: "São Paulo East, Brazil",
+                    announceDate: "October 2020",
+                    x: -46.6396,
+                    y: -23.5558
+                },
+                {
+                    id: 49,
+                    name: "Santa Cruz, Bolivia",
+                    announceDate: "October 2020",
+                    x: -63.1561,
+                    y: -17.8146
+                },
+
+                //April 2021 General Conference
+                {
+                    id: 50,
+                    name: "Oslo, Norway",
+                    announceDate: "April 2021",
+                    x: 10.7522,
+                    y: 59.9139
+                },
+                {
+                    id: 51,
+                    name: "Brussels, Belgium",
+                    announceDate: "April 2021",
+                    x: 4.3517,
+                    y: 50.8503
+                },
+                {
+                    id: 52,
+                    name: "Vienna, Austria",
+                    announceDate: "April 2021",
+                    x: 16.3738,
+                    y: 48.2082
+                },
+                {
+                    id: 53,
+                    name: "Kumasi, Ghana",
+                    announceDate: "April 2021",
+                    x: -1.6163,
+                    y: 6.6666
+                },
+                {
+                    id: 54,
+                    name: "Beira, Mozambique",
+
+                    name: "Cape Town, South Africa",
+                    announceDate: "April 2021",
+                    x: 18.4241,
+                    y: -33.9249
+                },
+                {
+                    id: 56,
+                    name: "Singapore, Republic of Singapore",
+                    announceDate: "April 2021",
+                    x: 103.8198,
+                    y: 1.3521
+                },
+                {
+                    id: 57,
+                    name: "Belo Horizonte, Brazil",
+                    announceDate: "April 2021",
+                    x: -43.9387,
+                    y: -19.9191
+                },
+                {
+                    id: 58,
+                    name: "Cali, Colombia",
+                    announceDate: "April 2021",
+                    x: -76.5320,
+                    y: 3.4516
+                },
+                {
+                    id: 59,
+                    name: "Querétaro, Mexico",
+                    announceDate: "April 2021",
+                    x: -100.3899,
+                    y: 20.5888
+                },
+                {
+                    id: 60,
+                    name: "Torreón, Mexico",
+                    announceDate: "April 2021",
+                    x: -103.4068,
+                    y: 25.5428
+                },
+                {
+                    id: 61,
+                    name: "Helena, Montana",
+                    announceDate: "April 2021",
+                    x: -112.0391,
+                    y: 46.5891
+                },
+                {
+                    id: 62,
+                    name: "Casper, Wyoming",
+                    announceDate: "April 2021",
+                    x: -106.2981,
+                    y: 42.8487
+                },
+                {
+                    id: 63,
+                    name: "Grand Junction, Colorado",
+                    announceDate: "April 2021",
+                    x: -108.5506,
+                    y: 39.0639
+                },
+                {
+                    id: 64,
+                    name: "Farmington, New Mexico ",
+                    announceDate: "April 2021",
+                    x: -108.2187,
+                    y: 36.7281
+                },
+                {
+                    id: 65,
+                    name: "Burley, Idaho",
+                    announceDate: "April 2021",
+                    x: -113.7928,
+                    y: 42.5357
+                },
+                {
+                    id: 66,
+                    name: "Eugene, Oregon",
+                    announceDate: "April 2021",
+                    x: -123.0868,
+                    y: 44.0521
+                },
+                {
+                    id: 67,
+                    name: "Elko, Nevada",
+                    announceDate: "April 2021",
+                    x: -115.7631,
+                    y: 40.8324
+                },
+                {
+                    id: 68,
+                    name: "Yorba Linda, California",
+                    announceDate: "April 2021",
+                    x: -117.8133,
+                    y: 33.8885
+                },
+                {
+                    id: 69,
+                    name: "Smithfield, Utah",
+                    announceDate: "April 2021",
+                    x: -111.8327,
+                    y: 41.8383
+                },
+
+                //May 2021
+                {
+                    id: 70,
+                    name: "Ephraim, Utah",
+                    announceDate: "May 2021",
+                    x: -111.5863,
+                    y: 39.3597
+                },
+
+                //October 2021 general conference
+                {
+                    id: 71,
+                    name: "Kaohsiung, Taiwan",
+                    announceDate: "October 2021",
+                    x: 120.3014,
+                    y: 22.6273
+                },
+                {
+                    id: 72,
+                    name: "Tacloban City, Philippines",
+                    announceDate: "October 2021",
+                    x: 124.9617,
+                    y: 11.2543
+                },
+                {
+                    id: 73,
+                    name: "Monrovia, Liberia",
+                    announceDate: "October 2021",
+                    x: -10.8074,
+                    y: 6.3156
+                },
+                {
+                    id: 74,
+                    name: "Kananga, Democratic Republic of the Congo",
+                    announceDate: "October 2021",
+                    x: 22.4172,
+                    y: -5.8975
+                },
+                {
+                    id: 75,
+                    name: "Antananarivo, Madagascar",
+                    announceDate: "October 2021",
+                    x: 47.5079,
+                    y: -18.8792
+                },
+                {
+                    id: 76,
+                    name: "Culiacán, México",
+                    announceDate: "October 2021",
+                    x: -107.3940,
+                    y: 24.8091
+                },
+                {
+                    id: 77,
+                    name: "Vitória, Brazil",
+                    announceDate: "October 2021",
+                    x: -40.3385,
+                    y: -20.3197
+                },
+                {
+                    id: 78,
+                    name: "La Paz, Bolivia",
+                    announceDate: "October 2021",
+                    x: -68.1193,
+                    y: -16.4897
+                },
+                {
+                    id: 79,
+                    name: "Santiago West, Chile",
+                    announceDate: "October 2021",
+                    x: -70.6693,
+                    y: -33.4489
+                },
+                {
+                    id: 80,
+                    name: "Fort Worth, Texas",
+                    announceDate: "October 2021",
+                    x: -97.3308,
+                    y: 32.7555
+                },
+                {
+                    id: 81,
+                    name: "Cody, Wyoming",
+                    announceDate: "October 2021",
+                    x: -109.0565,
+                    y: 44.5263
+                },
+                {
+                    id: 82,
+                    name: "Rexburg North, Idaho",
+                    announceDate: "October 2021",
+                    x: -111.7924,
+                    y: 43.8231
+                },
+                {
+                    id: 83,
+                    name: "Heber Valley, Utah",
+                    announceDate: "October 2021",
+                    x: -111.4133,
+                    y: 40.5070
+                }
+            ];
+
+            for (let i in temples) {
+                const point = { //Create a point
+                    type: "point",
+                    longitude: temples[i].x,
+                    latitude: temples[i].y
+                };
+
+                const attributes = {
+                    Name: temples[i].name,
+                    Description: "Announced " + temples[i].announceDate
+                }
+                const pointGraphic = new Graphic({
+                    geometry: point,
+                    symbol: simpleMarkerSymbol,
+
+                    attributes: attributes,
+                    popupTemplate: popupTemplate
+                });
+                graphicsLayer.add(pointGraphic);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1>
+            Temples Announced by President Nelson
+        </h1>
+    </header>
+    <div id="viewDiv"></div>
+    <footer>
+        <p>
+            "And now, if there are faults they are the mistakes of men; wherefore, condemn not the things of God, that
+            ye may be found spotless at the judgment-seat of Christ."
+        </p>
+
+        <p>
+            All of these markers are, to the best of my knowledge, pointing to the city where the temples will go, not
+            to the actual temple sites. Any error in coordinates is my fault and not the fault of the Church of Jesus
+            Christ of Latter-day Saints or any other
+            organization.
+        </p>
+        <p>
+            -Dallin Watson
+        </p>
+    </footer>
+</body>
+
+</html>
