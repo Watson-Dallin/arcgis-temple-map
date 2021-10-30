@@ -7,9 +7,7 @@ I was inspired to make this list after reading an article that President Russel 
 I wanted to learn mapping software as well as celebrate the announcement of so many temples. You may not know much about temples, but many of these beautiful buildings are going to be built in Africa, South America, and the islands of the sea where believers have been praying for access to them for decades.
 
 
-[Software Demo Video](https://youtu.be/eADRp3JyMGQ)
-
-Note: I've included these images because the demonstration video failed and only captured audio
+[Software Demo Video](https://youtu.be/N1JSSTF2snE)
 
 Full Map
 ![Full Map Image](https://github.com/Watson-Dallin/arcgis-temple-map/blob/main/Full%20Map.png?raw=true)
